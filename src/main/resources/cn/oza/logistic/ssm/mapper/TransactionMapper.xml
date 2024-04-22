@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.oza.logistic.ssm.mapper.TransactionMapper">
+  <resultMap id="BaseResultMap" type="cn.oza.logistic.ssm.pojo.Transaction">
+    <id column="transaction_id" jdbcType="BIGINT" property="transactionId" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="pick_up_fee" jdbcType="INTEGER" property="pickUpFee" />
+    <result column="volume_rate" jdbcType="DOUBLE" property="volumeRate" />
+    <result column="weight_rate" jdbcType="DOUBLE" property="weightRate" />
+    <result column="storage_id" jdbcType="BIGINT" property="storageId" />
+    <result column="total_fee" jdbcType="VARCHAR" property="totalFee" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    transaction_id, order_id, user_id, pick_up_fee, volume_rate, weight_rate, storage_id, 
+    total_fee
+  </sql>
+  <select id="selectByExample" parameterType="cn.oza.logistic.ssm.pojo.TransactionExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from t_transaction
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_transaction
+    where transaction_id = #{transactionId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_transaction
+    where transaction_id = #{transactionId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.oza.logistic.ssm.pojo.Transaction"
+  keyProperty="transactionId" keyColumn="transaction_id" useGeneratedKeys="true">
+    insert into t_transaction (transaction_id, order_id, user_id, 
+      pick_up_fee, volume_rate, weight_rate, 
+      storage_id, total_fee)
+    values (#{transactionId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{pickUpFee,jdbcType=INTEGER}, #{volumeRate,jdbcType=DOUBLE}, #{weightRate,jdbcType=DOUBLE}, 
+      #{storageId,jdbcType=BIGINT}, #{totalFee,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.oza.logistic.ssm.pojo.Transaction">
+    insert into t_transaction
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="transactionId != null">
+        transaction_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="pickUpFee != null">
+        pick_up_fee,
+      </if>
+      <if test="volumeRate != null">
+        volume_rate,
+      </if>
+      <if test="weightRate != null">
+        weight_rate,
+      </if>
+      <if test="storageId != null">
+        storage_id,
+      </if>
+      <if test="totalFee != null">
+        total_fee,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="transactionId != null">
+        #{transactionId,jdbcType=BIGINT},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="pickUpFee != null">
+        #{pickUpFee,jdbcType=INTEGER},
+      </if>
+      <if test="volumeRate != null">
+        #{volumeRate,jdbcType=DOUBLE},
+      </if>
+      <if test="weightRate != null">
+        #{weightRate,jdbcType=DOUBLE},
+      </if>
+      <if test="storageId != null">
+        #{storageId,jdbcType=BIGINT},
+      </if>
+      <if test="totalFee != null">
+        #{totalFee,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.oza.logistic.ssm.pojo.Transaction">
+    update t_transaction
+    <set>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="pickUpFee != null">
+        pick_up_fee = #{pickUpFee,jdbcType=INTEGER},
+      </if>
+      <if test="volumeRate != null">
+        volume_rate = #{volumeRate,jdbcType=DOUBLE},
+      </if>
+      <if test="weightRate != null">
+        weight_rate = #{weightRate,jdbcType=DOUBLE},
+      </if>
+      <if test="storageId != null">
+        storage_id = #{storageId,jdbcType=BIGINT},
+      </if>
+      <if test="totalFee != null">
+        total_fee = #{totalFee,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where transaction_id = #{transactionId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.oza.logistic.ssm.pojo.Transaction">
+    update t_transaction
+    set order_id = #{orderId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      pick_up_fee = #{pickUpFee,jdbcType=INTEGER},
+      volume_rate = #{volumeRate,jdbcType=DOUBLE},
+      weight_rate = #{weightRate,jdbcType=DOUBLE},
+      storage_id = #{storageId,jdbcType=BIGINT},
+      total_fee = #{totalFee,jdbcType=VARCHAR}
+    where transaction_id = #{transactionId,jdbcType=BIGINT}
+  </update>
+</mapper>

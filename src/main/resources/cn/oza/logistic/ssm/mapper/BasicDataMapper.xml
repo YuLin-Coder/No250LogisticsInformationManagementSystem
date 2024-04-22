@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.oza.logistic.ssm.mapper.BasicDataMapper">
+  <resultMap id="BaseResultMap" type="cn.oza.logistic.ssm.pojo.BasicData">
+    <id column="base_id" jdbcType="BIGINT" property="baseId" />
+    <result column="base_name" jdbcType="VARCHAR" property="baseName" />
+    <result column="base_desc" jdbcType="VARCHAR" property="baseDesc" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    base_id, base_name, base_desc, parent_id
+  </sql>
+  <select id="selectByExample" parameterType="cn.oza.logistic.ssm.pojo.BasicDataExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from t_basicdata
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_basicdata
+    where base_id = #{baseId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_basicdata
+    where base_id = #{baseId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.oza.logistic.ssm.pojo.BasicData">
+    insert into t_basicdata (base_id, base_name, base_desc, 
+      parent_id)
+    values (#{baseId,jdbcType=BIGINT}, #{baseName,jdbcType=VARCHAR}, #{baseDesc,jdbcType=VARCHAR}, 
+      #{parentId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.oza.logistic.ssm.pojo.BasicData">
+    insert into t_basicdata
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="baseId != null">
+        base_id,
+      </if>
+      <if test="baseName != null">
+        base_name,
+      </if>
+      <if test="baseDesc != null">
+        base_desc,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="baseId != null">
+        #{baseId,jdbcType=BIGINT},
+      </if>
+      <if test="baseName != null">
+        #{baseName,jdbcType=VARCHAR},
+      </if>
+      <if test="baseDesc != null">
+        #{baseDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.oza.logistic.ssm.pojo.BasicData">
+    update t_basicdata
+    <set>
+      <if test="baseName != null">
+        base_name = #{baseName,jdbcType=VARCHAR},
+      </if>
+      <if test="baseDesc != null">
+        base_desc = #{baseDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where base_id = #{baseId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.oza.logistic.ssm.pojo.BasicData">
+    update t_basicdata
+    set base_name = #{baseName,jdbcType=VARCHAR},
+      base_desc = #{baseDesc,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=BIGINT}
+    where base_id = #{baseId,jdbcType=BIGINT}
+  </update>
+</mapper>

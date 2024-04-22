@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.oza.logistic.ssm.mapper.TransactionDetailMapper">
+  <resultMap id="BaseResultMap" type="cn.oza.logistic.ssm.pojo.TransactionDetail">
+    <id column="transaction_detail_id" jdbcType="BIGINT" property="transactionDetailId" />
+    <result column="order_detail_id" jdbcType="BIGINT" property="orderDetailId" />
+    <result column="length" jdbcType="BIGINT" property="length" />
+    <result column="width" jdbcType="BIGINT" property="width" />
+    <result column="height" jdbcType="BIGINT" property="height" />
+    <result column="volume" jdbcType="DOUBLE" property="volume" />
+    <result column="weight" jdbcType="DOUBLE" property="weight" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    transaction_detail_id, order_detail_id, length, width, height, volume, weight
+  </sql>
+  <select id="selectByExample" parameterType="cn.oza.logistic.ssm.pojo.TransactionDetailExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from t_transaction_detail
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_transaction_detail
+    where transaction_detail_id = #{transactionDetailId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_transaction_detail
+    where transaction_detail_id = #{transactionDetailId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.oza.logistic.ssm.pojo.TransactionDetail">
+    insert into t_transaction_detail (transaction_detail_id, order_detail_id, 
+      length, width, height, 
+      volume, weight)
+    values (#{transactionDetailId,jdbcType=BIGINT}, #{orderDetailId,jdbcType=BIGINT}, 
+      #{length,jdbcType=BIGINT}, #{width,jdbcType=BIGINT}, #{height,jdbcType=BIGINT}, 
+      #{volume,jdbcType=DOUBLE}, #{weight,jdbcType=DOUBLE})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.oza.logistic.ssm.pojo.TransactionDetail">
+    insert into t_transaction_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="transactionDetailId != null">
+        transaction_detail_id,
+      </if>
+      <if test="orderDetailId != null">
+        order_detail_id,
+      </if>
+      <if test="length != null">
+        length,
+      </if>
+      <if test="width != null">
+        width,
+      </if>
+      <if test="height != null">
+        height,
+      </if>
+      <if test="volume != null">
+        volume,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="transactionDetailId != null">
+        #{transactionDetailId,jdbcType=BIGINT},
+      </if>
+      <if test="orderDetailId != null">
+        #{orderDetailId,jdbcType=BIGINT},
+      </if>
+      <if test="length != null">
+        #{length,jdbcType=BIGINT},
+      </if>
+      <if test="width != null">
+        #{width,jdbcType=BIGINT},
+      </if>
+      <if test="height != null">
+        #{height,jdbcType=BIGINT},
+      </if>
+      <if test="volume != null">
+        #{volume,jdbcType=DOUBLE},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.oza.logistic.ssm.pojo.TransactionDetail">
+    update t_transaction_detail
+    <set>
+      <if test="orderDetailId != null">
+        order_detail_id = #{orderDetailId,jdbcType=BIGINT},
+      </if>
+      <if test="length != null">
+        length = #{length,jdbcType=BIGINT},
+      </if>
+      <if test="width != null">
+        width = #{width,jdbcType=BIGINT},
+      </if>
+      <if test="height != null">
+        height = #{height,jdbcType=BIGINT},
+      </if>
+      <if test="volume != null">
+        volume = #{volume,jdbcType=DOUBLE},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where transaction_detail_id = #{transactionDetailId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.oza.logistic.ssm.pojo.TransactionDetail">
+    update t_transaction_detail
+    set order_detail_id = #{orderDetailId,jdbcType=BIGINT},
+      length = #{length,jdbcType=BIGINT},
+      width = #{width,jdbcType=BIGINT},
+      height = #{height,jdbcType=BIGINT},
+      volume = #{volume,jdbcType=DOUBLE},
+      weight = #{weight,jdbcType=DOUBLE}
+    where transaction_detail_id = #{transactionDetailId,jdbcType=BIGINT}
+  </update>
+</mapper>

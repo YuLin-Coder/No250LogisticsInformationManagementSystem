@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.oza.logistic.ssm.mapper.OrderMapper">
+  <resultMap id="BaseResultMap" type="cn.oza.logistic.ssm.pojo.Order">
+    <id column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="customer_id" jdbcType="BIGINT" property="customerId" />
+    <result column="shipping_address" jdbcType="VARCHAR" property="shippingAddress" />
+    <result column="shipping_name" jdbcType="VARCHAR" property="shippingName" />
+    <result column="shipping_phone" jdbcType="VARCHAR" property="shippingPhone" />
+    <result column="take_name" jdbcType="VARCHAR" property="takeName" />
+    <result column="take_address" jdbcType="VARCHAR" property="takeAddress" />
+    <result column="take_phone" jdbcType="VARCHAR" property="takePhone" />
+    <result column="order_status" jdbcType="INTEGER" property="orderStatus" />
+    <result column="payment_method_id" jdbcType="BIGINT" property="paymentMethodId" />
+    <result column="interval_id" jdbcType="BIGINT" property="intervalId" />
+    <result column="take_method_id" jdbcType="BIGINT" property="takeMethodId" />
+    <result column="freight_method_id" jdbcType="BIGINT" property="freightMethodId" />
+    <result column="order_remark" jdbcType="VARCHAR" property="orderRemark" />
+
+    <association property="customer" column="customer_id" select="selectCustomerById"/>
+  </resultMap>
+
+  <select id="selectCustomerById" resultType="Customer" parameterType="Integer">
+    select customer_id customerId, customer_name customerName, phone, email, address, gender, remark, id_card idCard, user_id userId, location_id locationId from t_customer where customer_id = #{customer_id}
+  </select>
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    order_id, user_id, customer_id, shipping_address, shipping_name, shipping_phone, 
+    take_name, take_address, take_phone, order_status, payment_method_id, interval_id, 
+    take_method_id, freight_method_id, order_remark
+  </sql>
+  <select id="selectByExample" parameterType="cn.oza.logistic.ssm.pojo.OrderExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from t_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_order
+    where order_id = #{orderId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_order
+    where order_id = #{orderId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.oza.logistic.ssm.pojo.Order" keyColumn="order_id" keyProperty="orderId" useGeneratedKeys="true">
+    insert into t_order (order_id, user_id, customer_id, 
+      shipping_address, shipping_name, shipping_phone, 
+      take_name, take_address, take_phone, 
+      order_status, payment_method_id, interval_id, 
+      take_method_id, freight_method_id, order_remark
+      )
+    values (#{orderId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{customerId,jdbcType=BIGINT}, 
+      #{shippingAddress,jdbcType=VARCHAR}, #{shippingName,jdbcType=VARCHAR}, #{shippingPhone,jdbcType=VARCHAR}, 
+      #{takeName,jdbcType=VARCHAR}, #{takeAddress,jdbcType=VARCHAR}, #{takePhone,jdbcType=VARCHAR}, 
+      #{orderStatus,jdbcType=INTEGER}, #{paymentMethodId,jdbcType=BIGINT}, #{intervalId,jdbcType=BIGINT}, 
+      #{takeMethodId,jdbcType=BIGINT}, #{freightMethodId,jdbcType=BIGINT}, #{orderRemark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.oza.logistic.ssm.pojo.Order">
+    insert into t_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="shippingAddress != null">
+        shipping_address,
+      </if>
+      <if test="shippingName != null">
+        shipping_name,
+      </if>
+      <if test="shippingPhone != null">
+        shipping_phone,
+      </if>
+      <if test="takeName != null">
+        take_name,
+      </if>
+      <if test="takeAddress != null">
+        take_address,
+      </if>
+      <if test="takePhone != null">
+        take_phone,
+      </if>
+      <if test="orderStatus != null">
+        order_status,
+      </if>
+      <if test="paymentMethodId != null">
+        payment_method_id,
+      </if>
+      <if test="intervalId != null">
+        interval_id,
+      </if>
+      <if test="takeMethodId != null">
+        take_method_id,
+      </if>
+      <if test="freightMethodId != null">
+        freight_method_id,
+      </if>
+      <if test="orderRemark != null">
+        order_remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="shippingAddress != null">
+        #{shippingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingName != null">
+        #{shippingName,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingPhone != null">
+        #{shippingPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="takeName != null">
+        #{takeName,jdbcType=VARCHAR},
+      </if>
+      <if test="takeAddress != null">
+        #{takeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="takePhone != null">
+        #{takePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null">
+        #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="paymentMethodId != null">
+        #{paymentMethodId,jdbcType=BIGINT},
+      </if>
+      <if test="intervalId != null">
+        #{intervalId,jdbcType=BIGINT},
+      </if>
+      <if test="takeMethodId != null">
+        #{takeMethodId,jdbcType=BIGINT},
+      </if>
+      <if test="freightMethodId != null">
+        #{freightMethodId,jdbcType=BIGINT},
+      </if>
+      <if test="orderRemark != null">
+        #{orderRemark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.oza.logistic.ssm.pojo.Order">
+    update t_order
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="customerId != null">
+        customer_id = #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="shippingAddress != null">
+        shipping_address = #{shippingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingName != null">
+        shipping_name = #{shippingName,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingPhone != null">
+        shipping_phone = #{shippingPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="takeName != null">
+        take_name = #{takeName,jdbcType=VARCHAR},
+      </if>
+      <if test="takeAddress != null">
+        take_address = #{takeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="takePhone != null">
+        take_phone = #{takePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null">
+        order_status = #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="paymentMethodId != null">
+        payment_method_id = #{paymentMethodId,jdbcType=BIGINT},
+      </if>
+      <if test="intervalId != null">
+        interval_id = #{intervalId,jdbcType=BIGINT},
+      </if>
+      <if test="takeMethodId != null">
+        take_method_id = #{takeMethodId,jdbcType=BIGINT},
+      </if>
+      <if test="freightMethodId != null">
+        freight_method_id = #{freightMethodId,jdbcType=BIGINT},
+      </if>
+      <if test="orderRemark != null">
+        order_remark = #{orderRemark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where order_id = #{orderId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.oza.logistic.ssm.pojo.Order">
+    update t_order
+    set user_id = #{userId,jdbcType=BIGINT},
+      customer_id = #{customerId,jdbcType=BIGINT},
+      shipping_address = #{shippingAddress,jdbcType=VARCHAR},
+      shipping_name = #{shippingName,jdbcType=VARCHAR},
+      shipping_phone = #{shippingPhone,jdbcType=VARCHAR},
+      take_name = #{takeName,jdbcType=VARCHAR},
+      take_address = #{takeAddress,jdbcType=VARCHAR},
+      take_phone = #{takePhone,jdbcType=VARCHAR},
+      order_status = #{orderStatus,jdbcType=INTEGER},
+      payment_method_id = #{paymentMethodId,jdbcType=BIGINT},
+      interval_id = #{intervalId,jdbcType=BIGINT},
+      take_method_id = #{takeMethodId,jdbcType=BIGINT},
+      freight_method_id = #{freightMethodId,jdbcType=BIGINT},
+      order_remark = #{orderRemark,jdbcType=VARCHAR}
+    where order_id = #{orderId,jdbcType=BIGINT}
+  </update>
+</mapper>
